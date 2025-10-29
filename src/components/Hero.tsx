@@ -44,7 +44,7 @@ const Hero = () => {
               onClick={scrollToContact}
               className="bg-secondary hover:bg-secondary/90 text-primary font-heading font-bold text-lg group"
             >
-              Entre em Contato
+              Compre em nossa Loja Virtual
               <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
             </Button>
             <Button

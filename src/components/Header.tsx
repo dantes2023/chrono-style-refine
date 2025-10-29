@@ -106,6 +106,12 @@ const Header = () => {
             >
               Parceiros
             </button>
+            <button
+              onClick={() => scrollToSection("contact")}
+              className="font-heading font-medium text-foreground hover:text-primary transition-colors"
+            >
+              Loja Virtual
+            </button>
             <Button
               onClick={() => scrollToSection("contact")}
               className="bg-gradient-primary font-heading font-semibold"
@@ -174,6 +180,12 @@ const Header = () => {
                 className="font-heading font-medium text-foreground hover:text-primary transition-colors text-left py-2"
               >
                 Parceiros
+              </button>
+              <button
+                onClick={() => scrollToSection("contact")}
+                className="font-heading font-medium text-foreground hover:text-primary transition-colors text-left py-2"
+              >
+                Loja Virtual
               </button>
               <Button
                 onClick={() => scrollToSection("contact")}
