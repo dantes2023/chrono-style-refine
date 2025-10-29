@@ -49,9 +49,9 @@ const Hero = () => {
             </Button>
             <Button
               size="lg"
-              variant="outline"
+              variant="hero"
               onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}
-              className="border-2 border-white text-white hover:bg-white hover:text-primary font-heading font-bold text-lg"
+              className="font-heading font-bold text-lg"
             >
               Conheça Mais
             </Button>
