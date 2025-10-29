@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, ChevronDown } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
 import renovarLogo from "@/assets/renovar-logo.png";
 import {
   NavigationMenu,
@@ -14,6 +15,8 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProductsOpen, setIsProductsOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const productCategories = [
     { name: "Sementes de Milho", id: "products", category: "milho" },
@@ -31,11 +34,30 @@ const Header = () => {
   }, []);
 
   const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-      setIsMobileMenuOpen(false);
+    if (location.pathname !== "/") {
+      navigate("/");
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
+    } else {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
     }
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleAboutClick = () => {
+    if (location.pathname === "/sobre") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      navigate("/sobre");
+    }
+    setIsMobileMenuOpen(false);
   };
 
   return (
@@ -61,7 +83,7 @@ const Header = () => {
               Início
             </button>
             <button
-              onClick={() => scrollToSection("about")}
+              onClick={handleAboutClick}
               className="font-heading font-medium text-foreground hover:text-primary transition-colors"
             >
               Sobre Nós
@@ -140,7 +162,7 @@ const Header = () => {
                 Início
               </button>
               <button
-                onClick={() => scrollToSection("about")}
+                onClick={handleAboutClick}
                 className="font-heading font-medium text-foreground hover:text-primary transition-colors text-left py-2"
               >
                 Sobre Nós
