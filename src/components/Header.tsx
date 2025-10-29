@@ -40,8 +40,8 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? "bg-background/95 backdrop-blur-md shadow-soft" : "bg-transparent"
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-background/95 backdrop-blur-md ${
+        isScrolled ? "shadow-soft" : ""
       }`}
     >
       <div className="container mx-auto px-4 lg:px-8">
@@ -94,6 +94,12 @@ const Header = () => {
               </NavigationMenuList>
             </NavigationMenu>
 
+            <button
+              onClick={() => scrollToSection("results")}
+              className="font-heading font-medium text-foreground hover:text-primary transition-colors"
+            >
+              Resultados
+            </button>
             <button
               onClick={() => scrollToSection("partners")}
               className="font-heading font-medium text-foreground hover:text-primary transition-colors"
@@ -157,6 +163,12 @@ const Header = () => {
                 )}
               </div>
 
+              <button
+                onClick={() => scrollToSection("results")}
+                className="font-heading font-medium text-foreground hover:text-primary transition-colors text-left py-2"
+              >
+                Resultados
+              </button>
               <button
                 onClick={() => scrollToSection("partners")}
                 className="font-heading font-medium text-foreground hover:text-primary transition-colors text-left py-2"
