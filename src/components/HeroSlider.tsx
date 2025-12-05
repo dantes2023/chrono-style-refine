@@ -124,7 +124,7 @@ const HeroSlider = () => {
   };
 
   return (
-    <section id="home" className="relative min-h-screen overflow-hidden bg-primary">
+    <section id="home" className="relative min-h-screen overflow-hidden bg-background">
       <div className="max-w-[1920px] mx-auto relative min-h-screen">
       <div className="overflow-hidden h-full" ref={emblaRef}>
         <div className="flex h-full">
