@@ -124,7 +124,8 @@ const HeroSlider = () => {
   };
 
   return (
-    <section id="home" className="relative min-h-screen overflow-hidden">
+    <section id="home" className="relative min-h-screen overflow-hidden bg-primary">
+      <div className="max-w-[1920px] mx-auto relative min-h-screen">
       <div className="overflow-hidden h-full" ref={emblaRef}>
         <div className="flex h-full">
           {slides.map((slide) => (
@@ -227,6 +228,7 @@ const HeroSlider = () => {
             fill="hsl(var(--background))"
           />
         </svg>
+      </div>
       </div>
     </section>
   );
