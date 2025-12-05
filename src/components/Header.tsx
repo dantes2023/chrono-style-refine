@@ -78,13 +78,13 @@ const Header = () => {
           <nav className="hidden md:flex items-center gap-8">
             <button
               onClick={() => scrollToSection("home")}
-              className="font-heading font-medium text-foreground hover:text-primary transition-colors"
+              className="font-heading font-medium text-sm text-foreground hover:text-primary transition-colors"
             >
               Início
             </button>
             <button
               onClick={handleAboutClick}
-              className="font-heading font-medium text-foreground hover:text-primary transition-colors"
+              className="font-heading font-medium text-sm text-foreground hover:text-primary transition-colors"
             >
               Sobre Nós
             </button>
@@ -92,7 +92,7 @@ const Header = () => {
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="font-heading font-medium text-foreground hover:text-primary bg-transparent">
+                  <NavigationMenuTrigger className="font-heading font-medium text-sm text-foreground hover:text-primary bg-transparent">
                     Produtos
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
@@ -118,19 +118,19 @@ const Header = () => {
 
             <button
               onClick={() => scrollToSection("results")}
-              className="font-heading font-medium text-foreground hover:text-primary transition-colors"
+              className="font-heading font-medium text-sm text-foreground hover:text-primary transition-colors"
             >
               Resultados
             </button>
             <button
               onClick={() => scrollToSection("partners")}
-              className="font-heading font-medium text-foreground hover:text-primary transition-colors"
+              className="font-heading font-medium text-sm text-foreground hover:text-primary transition-colors"
             >
               Parceiros
             </button>
             <button
               onClick={() => scrollToSection("contact")}
-              className="font-heading font-medium text-foreground hover:text-primary transition-colors"
+              className="font-heading font-medium text-sm text-foreground hover:text-primary transition-colors"
             >
               Loja Virtual
             </button>
