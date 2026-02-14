@@ -12,6 +12,9 @@ interface Product {
   id: string;
   title: string;
   description: string;
+  detailed_description: string | null;
+  characteristics: unknown;
+  technical_sheet: unknown;
   category: string;
   image_url: string | null;
   icon_name: string;
@@ -150,6 +153,55 @@ const ProductDetail = () => {
                 </Button>
               </div>
             </div>
+          </div>
+
+          {/* Detailed sections */}
+          <div className="mt-16 space-y-12">
+            {/* Descrição Geral */}
+            {product.detailed_description && (
+              <div>
+                <h2 className="font-heading text-2xl font-bold text-foreground mb-4 border-b border-border pb-2">
+                  Descrição Geral
+                </h2>
+                <p className="font-body text-muted-foreground leading-relaxed text-base">
+                  {product.detailed_description}
+                </p>
+              </div>
+            )}
+
+            {/* Características */}
+            {product.characteristics && typeof product.characteristics === "object" && !Array.isArray(product.characteristics) && (
+              <div>
+                <h2 className="font-heading text-2xl font-bold text-foreground mb-4 border-b border-border pb-2">
+                  Características
+                </h2>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  {Object.entries(product.characteristics as Record<string, string>).map(([key, value]) => (
+                    <div key={key} className="flex justify-between bg-muted/50 rounded-xl px-4 py-3">
+                      <span className="font-heading font-semibold text-sm text-foreground">{key}</span>
+                      <span className="font-body text-sm text-muted-foreground">{value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Ficha Técnica */}
+            {product.technical_sheet && typeof product.technical_sheet === "object" && !Array.isArray(product.technical_sheet) && (
+              <div>
+                <h2 className="font-heading text-2xl font-bold text-foreground mb-4 border-b border-border pb-2">
+                  Ficha Técnica
+                </h2>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  {Object.entries(product.technical_sheet as Record<string, string>).map(([key, value]) => (
+                    <div key={key} className="flex justify-between bg-muted/50 rounded-xl px-4 py-3">
+                      <span className="font-heading font-semibold text-sm text-foreground">{key}</span>
+                      <span className="font-body text-sm text-muted-foreground">{value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </main>
