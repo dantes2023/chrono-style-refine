@@ -99,35 +99,36 @@ const Header = () => {
                     Produtos
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <div className="w-[500px] p-4 bg-background">
-                      <div className="grid gap-1">
-                        {categories.map((cat) => {
-                          const subs = subcategories.filter((s) => s.category_id === cat.id);
-                          return (
-                            <div key={cat.id}>
-                              <button
-                                onClick={() => goToStore(cat.name)}
-                                className="w-full text-left rounded-md p-3 font-heading text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
-                              >
-                                {cat.name}
-                              </button>
-                              {subs.length > 0 && (
-                                <div className="ml-4 mb-1">
+                    <div className="w-[260px] p-2 bg-background">
+                      {categories.map((cat) => {
+                        const subs = subcategories.filter((s) => s.category_id === cat.id);
+                        return (
+                          <div key={cat.id} className="relative group/cat">
+                            <button
+                              onClick={() => goToStore(cat.name)}
+                              className="w-full text-left rounded-md px-3 py-2.5 font-heading text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors flex items-center justify-between"
+                            >
+                              {cat.name}
+                              {subs.length > 0 && <ChevronDown className="h-3 w-3 -rotate-90" />}
+                            </button>
+                            {subs.length > 0 && (
+                              <div className="absolute left-full top-0 ml-1 hidden group-hover/cat:block z-50">
+                                <div className="w-[220px] bg-background border rounded-md shadow-lg p-2">
                                   {subs.map((sub) => (
                                     <button
                                       key={sub.id}
                                       onClick={() => goToStore(cat.name, sub.id)}
-                                      className="block w-full text-left rounded-md px-3 py-1.5 text-xs text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+                                      className="block w-full text-left rounded-md px-3 py-2 text-xs font-heading text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
                                     >
                                       {sub.name}
                                     </button>
                                   ))}
                                 </div>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
                     </div>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
