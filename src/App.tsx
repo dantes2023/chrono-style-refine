@@ -4,8 +4,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
+import { CartProvider } from "@/hooks/useCart";
 import Index from "./pages/Index";
 import AboutPage from "./pages/About";
+import StorePage from "./pages/Store";
 import NotFound from "./pages/NotFound";
 
 // Admin pages
@@ -23,26 +25,29 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <AuthProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            {/* Public routes */}
-            <Route path="/" element={<Index />} />
-            <Route path="/sobre" element={<AboutPage />} />
-            
-            {/* Admin routes */}
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin" element={<AdminLayout><Dashboard /></AdminLayout>} />
-            <Route path="/admin/banners" element={<AdminLayout><BannersPage /></AdminLayout>} />
-            <Route path="/admin/produtos" element={<AdminLayout><ProductsPage /></AdminLayout>} />
-            <Route path="/admin/parceiros" element={<AdminLayout><PartnersPage /></AdminLayout>} />
-            <Route path="/admin/noticias" element={<AdminLayout><NewsPage /></AdminLayout>} />
-            
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+        <CartProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              {/* Public routes */}
+              <Route path="/" element={<Index />} />
+              <Route path="/sobre" element={<AboutPage />} />
+              <Route path="/loja" element={<StorePage />} />
+              
+              {/* Admin routes */}
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin" element={<AdminLayout><Dashboard /></AdminLayout>} />
+              <Route path="/admin/banners" element={<AdminLayout><BannersPage /></AdminLayout>} />
+              <Route path="/admin/produtos" element={<AdminLayout><ProductsPage /></AdminLayout>} />
+              <Route path="/admin/parceiros" element={<AdminLayout><PartnersPage /></AdminLayout>} />
+              <Route path="/admin/noticias" element={<AdminLayout><NewsPage /></AdminLayout>} />
+              
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </CartProvider>
       </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>

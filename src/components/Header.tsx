@@ -130,7 +130,7 @@ const Header = () => {
               Parceiros
             </button>
             <button
-              onClick={() => scrollToSection("contact")}
+              onClick={() => navigate("/loja")}
               className="font-heading font-medium text-sm text-foreground hover:text-primary hover:font-bold hover:scale-110 transition-all duration-300"
             >
               Loja Virtual
@@ -205,7 +205,7 @@ const Header = () => {
                 Parceiros
               </button>
               <button
-                onClick={() => scrollToSection("contact")}
+                onClick={() => { navigate("/loja"); setIsMobileMenuOpen(false); }}
                 className="font-heading font-medium text-foreground hover:text-primary transition-colors text-left py-2"
               >
                 Loja Virtual
