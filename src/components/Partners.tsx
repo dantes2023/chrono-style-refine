@@ -11,9 +11,16 @@ import yaraLogo from "@/assets/yara-logo.png";
 import soloRicoLogo from "@/assets/solo-rico-logo.jpg";
 import grupoRenovarLogo from "@/assets/grupo-renovar-logo.png";
 
-import agroceresLogo from "@/assets/agroceres-logo.png";
-import cultivarLogo from "@/assets/cultivar-logo.png";
-import agroNorteLogo from "@/assets/agro-norte-logo.jpg";
+import bayerSeminisLogo from "@/assets/bayer-seminis-logo.png";
+import topseedLogo from "@/assets/topseed-logo.png";
+import agrocincoLogo from "@/assets/agrocinco-logo.png";
+import ameribrasLogo from "@/assets/ameribras-logo.png";
+import ourofinoLogo from "@/assets/ourofino-logo.png";
+import sumitomoLogo from "@/assets/sumitomo-logo.jpg";
+import gasparimLogo from "@/assets/gasparim-logo.png";
+import barenbrugBaixaoLogo from "@/assets/barenbrug-baixao-logo.jpg";
+import milagroLogo from "@/assets/milagro-logo.png";
+import grupoRenovarBaixaoLogo from "@/assets/grupo-renovar-baixao-logo.png";
 
 const cerradoPartners = [
   { name: "Boa Safra Sementes", logo: boaSafraLogo },
@@ -28,9 +35,16 @@ const cerradoPartners = [
 ];
 
 const baixaoPartners = [
-  { name: "Agroceres", logo: agroceresLogo },
-  { name: "Cultivar", logo: cultivarLogo },
-  { name: "Agro Norte", logo: agroNorteLogo },
+  { name: "Bayer Seminis", logo: bayerSeminisLogo },
+  { name: "Topseed", logo: topseedLogo },
+  { name: "Agrocinco", logo: agrocincoLogo },
+  { name: "Ameribras", logo: ameribrasLogo },
+  { name: "Ourofino", logo: ourofinoLogo },
+  { name: "Sumitomo Chemical", logo: sumitomoLogo },
+  { name: "Sementes Gasparim", logo: gasparimLogo },
+  { name: "Barenbrug", logo: barenbrugBaixaoLogo },
+  { name: "Milagro", logo: milagroLogo },
+  { name: "Grupo Renovar", logo: grupoRenovarBaixaoLogo },
 ];
 
 const PartnerGrid = ({ partners }: { partners: { name: string; logo: string }[] }) => (
