@@ -29,6 +29,7 @@ interface Product {
   display_order: number;
   is_active: boolean;
   subcategory_id: string | null;
+  price: number | null;
 }
 
 interface Category {
@@ -69,6 +70,7 @@ const ProductsPage = () => {
     icon_name: "Sprout",
     image_url: "",
     is_active: true,
+    price: "" as string,
   });
 
   const fetchData = async () => {
@@ -90,7 +92,7 @@ const ProductsPage = () => {
   );
 
   const resetForm = () => {
-    setFormData({ title: "", description: "", category: "", subcategory_id: null, icon_name: "Sprout", image_url: "", is_active: true });
+    setFormData({ title: "", description: "", category: "", subcategory_id: null, icon_name: "Sprout", image_url: "", is_active: true, price: "" });
     setEditingProduct(null);
   };
 
@@ -104,6 +106,7 @@ const ProductsPage = () => {
       icon_name: product.icon_name,
       image_url: product.image_url || "",
       is_active: product.is_active,
+      price: product.price != null ? String(product.price) : "",
     });
     setIsDialogOpen(true);
   };
@@ -127,6 +130,7 @@ const ProductsPage = () => {
       icon_name: formData.icon_name,
       image_url: formData.image_url || null,
       is_active: formData.is_active,
+      price: formData.price ? parseFloat(formData.price) : null,
       display_order: editingProduct ? editingProduct.display_order : products.length,
     };
 
@@ -210,6 +214,10 @@ const ProductsPage = () => {
                 </Select>
               </div>
               <ImageUpload value={formData.image_url} onChange={(url) => setFormData({ ...formData, image_url: url })} label="Imagem do Produto (opcional)" />
+              <div className="space-y-2">
+                <Label>Preço (R$)</Label>
+                <Input type="number" step="0.01" min="0" placeholder="0,00" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} />
+              </div>
               <div className="flex items-center space-x-2">
                 <Switch checked={formData.is_active} onCheckedChange={(c) => setFormData({ ...formData, is_active: c })} />
                 <Label>Produto Ativo</Label>
@@ -233,8 +241,9 @@ const ProductsPage = () => {
                 <TableRow>
                   <TableHead>Título</TableHead>
                   <TableHead>Categoria</TableHead>
-                  <TableHead>Subcategoria</TableHead>
-                  <TableHead>Status</TableHead>
+                   <TableHead>Subcategoria</TableHead>
+                    <TableHead>Preço</TableHead>
+                    <TableHead>Status</TableHead>
                   <TableHead className="text-right">Ações</TableHead>
                 </TableRow>
               </TableHeader>
@@ -246,6 +255,7 @@ const ProductsPage = () => {
                       <TableCell className="font-medium">{product.title}</TableCell>
                       <TableCell>{product.category}</TableCell>
                       <TableCell>{sub?.name || "—"}</TableCell>
+                      <TableCell>{product.price != null ? `R$ ${product.price.toFixed(2)}` : "—"}</TableCell>
                       <TableCell>
                         <span className={`px-2 py-1 rounded-full text-xs ${product.is_active ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"}`}>
                           {product.is_active ? "Ativo" : "Inativo"}

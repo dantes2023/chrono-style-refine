@@ -17,6 +17,7 @@ interface Product {
   image_url: string | null;
   icon_name: string;
   subcategory_id: string | null;
+  price: number | null;
 }
 
 interface Category {
@@ -187,13 +188,18 @@ const Store = () => {
                   </div>
                   <div className="p-5 flex flex-col flex-1">
                     <span className="text-xs font-heading font-semibold text-primary bg-primary/10 px-2 py-1 rounded-full self-start mb-3">{product.category}</span>
-                    <h3 className="font-heading font-bold text-lg text-foreground mb-2">{product.title}</h3>
+                    <h3 className="font-heading font-bold text-lg text-foreground mb-1">{product.title}</h3>
+                    {product.price != null && (
+                      <p className="font-heading font-bold text-primary mb-2">
+                        {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(product.price)}
+                      </p>
+                    )}
                     <p className="font-body text-sm text-muted-foreground flex-1 line-clamp-3">{product.description}</p>
                     <Button
                       className="mt-4 w-full bg-gradient-primary font-heading font-semibold"
                       onClick={(e) => {
                         e.stopPropagation();
-                        addItem({ id: product.id, title: product.title, category: product.category, image_url: product.image_url });
+                        addItem({ id: product.id, title: product.title, category: product.category, image_url: product.image_url, price: product.price ?? null });
                       }}
                     >
                       <Plus className="h-4 w-4 mr-2" />Adicionar

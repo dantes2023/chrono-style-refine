@@ -1,4 +1,5 @@
 import { useCart } from "@/hooks/useCart";
+import { useNavigate } from "react-router-dom";
 import {
   Sheet,
   SheetContent,
@@ -8,8 +9,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { Minus, Plus, Trash2, ShoppingCart } from "lucide-react";
 
+const formatCurrency = (value: number) =>
+  new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value);
+
 const CartDrawer = () => {
   const { items, isOpen, setIsOpen, updateQuantity, removeItem, clearCart, totalItems } = useCart();
+  const navigate = useNavigate();
+
+  const subtotal = items.reduce((sum, i) => sum + (i.price || 0) * i.quantity, 0);
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -31,39 +38,23 @@ const CartDrawer = () => {
               {items.map((item) => (
                 <div key={item.id} className="flex gap-3 p-3 bg-muted/50 rounded-xl">
                   {item.image_url && (
-                    <img
-                      src={item.image_url}
-                      alt={item.title}
-                      className="w-16 h-16 object-cover rounded-lg"
-                    />
+                    <img src={item.image_url} alt={item.title} className="w-16 h-16 object-cover rounded-lg" />
                   )}
                   <div className="flex-1 min-w-0">
                     <h4 className="font-heading font-semibold text-sm truncate">{item.title}</h4>
                     <p className="text-xs text-muted-foreground">{item.category}</p>
+                    {item.price != null && (
+                      <p className="text-xs font-semibold text-primary">{formatCurrency(item.price)}</p>
+                    )}
                     <div className="flex items-center gap-2 mt-2">
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="h-7 w-7"
-                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                      >
+                      <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => updateQuantity(item.id, item.quantity - 1)}>
                         <Minus className="h-3 w-3" />
                       </Button>
                       <span className="text-sm font-medium w-6 text-center">{item.quantity}</span>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="h-7 w-7"
-                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                      >
+                      <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => updateQuantity(item.id, item.quantity + 1)}>
                         <Plus className="h-3 w-3" />
                       </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-7 w-7 ml-auto text-destructive hover:text-destructive"
-                        onClick={() => removeItem(item.id)}
-                      >
+                      <Button variant="ghost" size="icon" className="h-7 w-7 ml-auto text-destructive hover:text-destructive" onClick={() => removeItem(item.id)}>
                         <Trash2 className="h-3 w-3" />
                       </Button>
                     </div>
@@ -73,25 +64,20 @@ const CartDrawer = () => {
             </div>
 
             <div className="border-t pt-4 space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="font-heading font-semibold">Total</span>
+                <span className="font-heading font-bold text-lg text-primary">{formatCurrency(subtotal)}</span>
+              </div>
               <Button
                 className="w-full bg-gradient-primary font-heading font-semibold"
                 onClick={() => {
-                  const msg = items
-                    .map((i) => `• ${i.title} (x${i.quantity})`)
-                    .join("\n");
-                  const text = encodeURIComponent(
-                    `Olá! Gostaria de fazer um pedido:\n\n${msg}\n\nPoderia me informar valores e disponibilidade?`
-                  );
-                  window.open(`https://wa.me/5500000000000?text=${text}`, "_blank");
+                  setIsOpen(false);
+                  navigate("/loja/checkout");
                 }}
               >
-                Enviar Pedido via WhatsApp
+                Finalizar Pedido
               </Button>
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={clearCart}
-              >
+              <Button variant="outline" className="w-full" onClick={clearCart}>
                 Limpar Carrinho
               </Button>
             </div>

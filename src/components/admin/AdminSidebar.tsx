@@ -22,6 +22,7 @@ import {
   LogOut,
   Home,
   Leaf,
+  ShoppingBag,
 } from "lucide-react";
 
 const menuItems = [
@@ -31,6 +32,7 @@ const menuItems = [
   { title: "Produtos", url: "/admin/produtos", icon: Package },
   { title: "Parceiros", url: "/admin/parceiros", icon: Users },
   { title: "Notícias", url: "/admin/noticias", icon: Newspaper },
+  { title: "Pedidos", url: "/admin/pedidos", icon: ShoppingBag },
 ];
 
 const AdminSidebar = () => {
