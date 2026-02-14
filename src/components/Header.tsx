@@ -142,7 +142,7 @@ const Header = () => {
             <button onClick={() => scrollToSection("results")} className={linkClass}>Resultados</button>
             <button onClick={() => scrollToSection("partners")} className={linkClass}>Parceiros</button>
             <button onClick={() => navigate("/loja")} className={linkClass}>Loja Virtual</button>
-            <button onClick={() => navigate(user ? "/minha-conta" : "/entrar")} className={`${linkClass} flex items-center gap-1`}>
+            <button onClick={() => navigate("/minha-conta")} className={`${linkClass} flex items-center gap-1`}>
               <UserCircle className="h-4 w-4" />
               {user ? "Minha Conta" : "Entrar"}
             </button>
@@ -191,7 +191,7 @@ const Header = () => {
               <button onClick={() => scrollToSection("results")} className="font-heading font-medium text-foreground hover:text-primary transition-colors text-left py-2">Resultados</button>
               <button onClick={() => scrollToSection("partners")} className="font-heading font-medium text-foreground hover:text-primary transition-colors text-left py-2">Parceiros</button>
               <button onClick={() => { navigate("/loja"); setIsMobileMenuOpen(false); }} className="font-heading font-medium text-foreground hover:text-primary transition-colors text-left py-2">Loja Virtual</button>
-              <button onClick={() => { navigate(user ? "/minha-conta" : "/entrar"); setIsMobileMenuOpen(false); }} className="font-heading font-medium text-foreground hover:text-primary transition-colors text-left py-2 flex items-center gap-2">
+              <button onClick={() => { navigate("/minha-conta"); setIsMobileMenuOpen(false); }} className="font-heading font-medium text-foreground hover:text-primary transition-colors text-left py-2 flex items-center gap-2">
                 <UserCircle className="h-5 w-5" />
                 {user ? "Minha Conta" : "Entrar"}
               </button>

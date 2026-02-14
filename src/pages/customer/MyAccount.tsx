@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import Header from "@/components/Header";
@@ -54,11 +54,9 @@ const MyAccountPage = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [loadingProfile, setLoadingProfile] = useState(true);
 
-  useEffect(() => {
-    if (!authLoading && !user) {
-      navigate("/entrar");
-    }
-  }, [authLoading, user, navigate]);
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [isLoginLoading, setIsLoginLoading] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -113,7 +111,62 @@ const MyAccountPage = () => {
     navigate("/");
   };
 
-  if (authLoading || loadingProfile) {
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoginLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({ email: loginEmail, password: loginPassword });
+    setIsLoginLoading(false);
+    if (error) {
+      toast({ title: "Erro ao entrar", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: "Login realizado com sucesso!" });
+    }
+  };
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1 pt-20 flex items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1 pt-20 flex items-center justify-center px-4">
+          <div className="w-full max-w-md bg-card border border-border rounded-2xl p-8">
+            <h1 className="font-heading text-2xl font-bold text-center mb-6">Entrar na sua conta</h1>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <Label htmlFor="login-email">Email</Label>
+                <Input id="login-email" type="email" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} required />
+              </div>
+              <div>
+                <Label htmlFor="login-password">Senha</Label>
+                <Input id="login-password" type="password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} required />
+              </div>
+              <Button type="submit" className="w-full bg-gradient-primary font-heading font-semibold" disabled={isLoginLoading}>
+                {isLoginLoading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Entrando...</> : "Entrar"}
+              </Button>
+            </form>
+            <p className="text-sm text-muted-foreground text-center mt-4">
+              Não tem conta?{" "}
+              <Link to="/cadastro" className="text-primary font-semibold hover:underline">Cadastre-se</Link>
+            </p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (loadingProfile) {
     return (
       <div className="min-h-screen flex flex-col">
         <Header />
