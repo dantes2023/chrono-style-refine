@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, UserCircle } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import renovarLogo from "@/assets/renovar-logo.png";
 import {
   NavigationMenu,
@@ -30,6 +31,7 @@ const Header = () => {
   const [hoveredCat, setHoveredCat] = useState<string | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
+  const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -140,6 +142,10 @@ const Header = () => {
             <button onClick={() => scrollToSection("results")} className={linkClass}>Resultados</button>
             <button onClick={() => scrollToSection("partners")} className={linkClass}>Parceiros</button>
             <button onClick={() => navigate("/loja")} className={linkClass}>Loja Virtual</button>
+            <button onClick={() => navigate(user ? "/minha-conta" : "/entrar")} className={`${linkClass} flex items-center gap-1`}>
+              <UserCircle className="h-4 w-4" />
+              {user ? "Minha Conta" : "Entrar"}
+            </button>
             <Button onClick={() => scrollToSection("contact")} className="bg-gradient-primary font-heading font-semibold">Contato</Button>
           </nav>
 
@@ -185,6 +191,10 @@ const Header = () => {
               <button onClick={() => scrollToSection("results")} className="font-heading font-medium text-foreground hover:text-primary transition-colors text-left py-2">Resultados</button>
               <button onClick={() => scrollToSection("partners")} className="font-heading font-medium text-foreground hover:text-primary transition-colors text-left py-2">Parceiros</button>
               <button onClick={() => { navigate("/loja"); setIsMobileMenuOpen(false); }} className="font-heading font-medium text-foreground hover:text-primary transition-colors text-left py-2">Loja Virtual</button>
+              <button onClick={() => { navigate(user ? "/minha-conta" : "/entrar"); setIsMobileMenuOpen(false); }} className="font-heading font-medium text-foreground hover:text-primary transition-colors text-left py-2 flex items-center gap-2">
+                <UserCircle className="h-5 w-5" />
+                {user ? "Minha Conta" : "Entrar"}
+              </button>
               <Button onClick={() => scrollToSection("contact")} className="bg-gradient-primary font-heading font-semibold w-full">Contato</Button>
             </div>
           </nav>

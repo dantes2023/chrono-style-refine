@@ -22,6 +22,9 @@ import PartnersPage from "./pages/admin/Partners";
 import NewsPage from "./pages/admin/News";
 import CategoriesPage from "./pages/admin/Categories";
 import OrdersPage from "./pages/admin/Orders";
+import CustomerLogin from "./pages/auth/Login";
+import CustomerRegister from "./pages/auth/Register";
+import MyAccountPage from "./pages/customer/MyAccount";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +43,11 @@ const App = () => (
               <Route path="/loja" element={<StorePage />} />
               <Route path="/loja/produto/:id" element={<ProductDetailPage />} />
               <Route path="/loja/checkout" element={<CheckoutPage />} />
+              
+              {/* Customer auth */}
+              <Route path="/entrar" element={<CustomerLogin />} />
+              <Route path="/cadastro" element={<CustomerRegister />} />
+              <Route path="/minha-conta" element={<MyAccountPage />} />
               
               {/* Admin routes */}
               <Route path="/admin/login" element={<AdminLogin />} />

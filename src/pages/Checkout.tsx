@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useCart } from "@/hooks/useCart";
@@ -26,12 +27,30 @@ const formatCurrency = (value: number) =>
 
 const Checkout = () => {
   const { items, updateQuantity, removeItem, clearCart } = useCart();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [form, setForm] = useState({ name: "", phone: "", email: "", address: "", city: "", notes: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Pre-fill form from profile if logged in
+  useEffect(() => {
+    if (!user) return;
+    supabase.from("profiles").select("*").eq("user_id", user.id).single().then(({ data }) => {
+      if (data) {
+        setForm((f) => ({
+          ...f,
+          name: data.full_name || f.name,
+          phone: data.phone || f.phone,
+          email: data.email || f.email,
+          address: data.address || f.address,
+          city: data.city || f.city,
+        }));
+      }
+    });
+  }, [user]);
 
   const subtotal = items.reduce((sum, i) => sum + (i.price || 0) * i.quantity, 0);
 
@@ -65,7 +84,8 @@ const Checkout = () => {
           customer_city: form.city?.trim() || null,
           customer_notes: form.notes?.trim() || null,
           total: subtotal,
-        })
+          user_id: user?.id || null,
+        } as any)
         .select("id")
         .single();
 
