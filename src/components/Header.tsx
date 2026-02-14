@@ -27,6 +27,7 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [expandedCat, setExpandedCat] = useState<string | null>(null);
+  const [hoveredCat, setHoveredCat] = useState<string | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
   const navigate = useNavigate();
@@ -99,21 +100,22 @@ const Header = () => {
                     Produtos
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <div className="w-[260px] p-2 bg-background">
+                    <div className="w-[260px] p-2 bg-background" onMouseLeave={() => setHoveredCat(null)}>
                       {categories.map((cat) => {
                         const subs = subcategories.filter((s) => s.category_id === cat.id);
+                        const isHovered = hoveredCat === cat.id;
                         return (
-                          <div key={cat.id} className="relative group/cat">
+                          <div key={cat.id} className="relative" onMouseEnter={() => setHoveredCat(cat.id)}>
                             <button
                               onClick={() => goToStore(cat.name)}
-                              className="w-full text-left rounded-md px-3 py-2.5 font-heading text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors flex items-center justify-between"
+                              className={`w-full text-left rounded-md px-3 py-2.5 font-heading text-sm font-medium transition-colors flex items-center justify-between ${isHovered ? "bg-accent text-accent-foreground" : "hover:bg-accent hover:text-accent-foreground"}`}
                             >
                               {cat.name}
                               {subs.length > 0 && <ChevronDown className="h-3 w-3 -rotate-90" />}
                             </button>
-                            {subs.length > 0 && (
-                              <div className="absolute left-full top-0 ml-1 hidden group-hover/cat:block z-50">
-                                <div className="w-[220px] bg-background border rounded-md shadow-lg p-2">
+                            {subs.length > 0 && isHovered && (
+                              <div className="absolute left-full top-0 ml-1 z-[100]">
+                                <div className="w-[220px] bg-background border border-border rounded-md shadow-lg p-2">
                                   {subs.map((sub) => (
                                     <button
                                       key={sub.id}
