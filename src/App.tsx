@@ -19,6 +19,7 @@ import BannersPage from "./pages/admin/Banners";
 import ProductsPage from "./pages/admin/Products";
 import PartnersPage from "./pages/admin/Partners";
 import NewsPage from "./pages/admin/News";
+import CategoriesPage from "./pages/admin/Categories";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +42,7 @@ const App = () => (
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin" element={<AdminLayout><Dashboard /></AdminLayout>} />
               <Route path="/admin/banners" element={<AdminLayout><BannersPage /></AdminLayout>} />
+              <Route path="/admin/categorias" element={<AdminLayout><CategoriesPage /></AdminLayout>} />
               <Route path="/admin/produtos" element={<AdminLayout><ProductsPage /></AdminLayout>} />
               <Route path="/admin/parceiros" element={<AdminLayout><PartnersPage /></AdminLayout>} />
               <Route path="/admin/noticias" element={<AdminLayout><NewsPage /></AdminLayout>} />
