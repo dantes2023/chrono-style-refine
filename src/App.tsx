@@ -8,6 +8,7 @@ import { CartProvider } from "@/hooks/useCart";
 import Index from "./pages/Index";
 import AboutPage from "./pages/About";
 import StorePage from "./pages/Store";
+import ProductDetailPage from "./pages/ProductDetail";
 import NotFound from "./pages/NotFound";
 
 // Admin pages
@@ -34,6 +35,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/sobre" element={<AboutPage />} />
               <Route path="/loja" element={<StorePage />} />
+              <Route path="/loja/produto/:id" element={<ProductDetailPage />} />
               
               {/* Admin routes */}
               <Route path="/admin/login" element={<AdminLogin />} />

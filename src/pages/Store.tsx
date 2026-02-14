@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -31,6 +32,7 @@ const Store = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState("Todos");
   const [search, setSearch] = useState("");
+  const navigate = useNavigate();
   const { addItem, totalItems, setIsOpen } = useCart();
 
   useEffect(() => {
@@ -132,7 +134,8 @@ const Store = () => {
               {filtered.map((product) => (
                 <div
                   key={product.id}
-                  className="group bg-card rounded-2xl overflow-hidden shadow-soft hover:shadow-elevated transition-all duration-300 hover:-translate-y-1 flex flex-col"
+                  className="group bg-card rounded-2xl overflow-hidden shadow-soft hover:shadow-elevated transition-all duration-300 hover:-translate-y-1 flex flex-col cursor-pointer"
+                  onClick={() => navigate(`/loja/produto/${product.id}`)}
                 >
                   <div className="aspect-[4/3] bg-muted overflow-hidden">
                     {product.image_url ? (
@@ -159,14 +162,15 @@ const Store = () => {
                     </p>
                     <Button
                       className="mt-4 w-full bg-gradient-primary font-heading font-semibold"
-                      onClick={() =>
+                      onClick={(e) => {
+                        e.stopPropagation();
                         addItem({
                           id: product.id,
                           title: product.title,
                           category: product.category,
                           image_url: product.image_url,
-                        })
-                      }
+                        });
+                      }}
                     >
                       <Plus className="h-4 w-4 mr-2" />
                       Adicionar
