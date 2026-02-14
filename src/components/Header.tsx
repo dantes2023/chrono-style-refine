@@ -19,10 +19,11 @@ const Header = () => {
   const location = useLocation();
 
   const productCategories = [
-    { name: "Sementes de Milho", id: "products", category: "milho" },
-    { name: "Sementes de Soja", id: "products", category: "soja" },
-    { name: "Sementes Forrageiras", id: "products", category: "forrageiras" },
-    { name: "Sementes Especiais", id: "products", category: "especiais" },
+    { name: "Sementes", id: "products", category: "sementes" },
+    { name: "Fertilizantes", id: "products", category: "fertilizantes" },
+    { name: "Defensivos", id: "products", category: "defensivos" },
+    { name: "Corretivos de Solo", id: "products", category: "corretivos" },
+    { name: "Pastagens em geral", id: "products", category: "pastagens" },
   ];
 
   useEffect(() => {
