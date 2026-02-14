@@ -138,26 +138,29 @@ const Store = () => {
 
             {/* Subcategory filters */}
             {activeSubs.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                <button
-                  onClick={() => setSubFilter(null)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-heading font-semibold transition-all ${
-                    !activeSubId ? "bg-secondary text-secondary-foreground shadow-sm" : "bg-muted/50 text-muted-foreground hover:bg-secondary/50"
-                  }`}
-                >
-                  Todas
-                </button>
-                {activeSubs.map((sub) => (
+              <div className="animate-fade-in bg-card border border-border rounded-2xl p-4 shadow-soft">
+                <p className="text-xs font-heading font-semibold text-muted-foreground mb-3 uppercase tracking-wider">Subcategorias</p>
+                <div className="flex flex-wrap gap-2">
                   <button
-                    key={sub.id}
-                    onClick={() => setSubFilter(sub.id)}
-                    className={`px-3 py-1.5 rounded-full text-xs font-heading font-semibold transition-all ${
-                      activeSubId === sub.id ? "bg-secondary text-secondary-foreground shadow-sm" : "bg-muted/50 text-muted-foreground hover:bg-secondary/50"
+                    onClick={() => setSubFilter(null)}
+                    className={`px-4 py-2 rounded-xl text-sm font-heading font-semibold transition-all duration-200 hover:scale-105 ${
+                      !activeSubId ? "bg-primary text-primary-foreground shadow-md" : "bg-muted text-muted-foreground hover:bg-primary/10 hover:text-primary"
                     }`}
                   >
-                    {sub.name}
+                    🏷️ Todas
                   </button>
-                ))}
+                  {activeSubs.map((sub) => (
+                    <button
+                      key={sub.id}
+                      onClick={() => setSubFilter(sub.id)}
+                      className={`px-4 py-2 rounded-xl text-sm font-heading font-semibold transition-all duration-200 hover:scale-105 ${
+                        activeSubId === sub.id ? "bg-primary text-primary-foreground shadow-md" : "bg-muted text-muted-foreground hover:bg-primary/10 hover:text-primary"
+                      }`}
+                    >
+                      {sub.name}
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
           </div>
