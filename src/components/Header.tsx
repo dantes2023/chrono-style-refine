@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 import renovarLogo from "@/assets/renovar-logo.png";
 import {
   NavigationMenu,
@@ -11,25 +12,40 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 
+interface Category {
+  id: string;
+  name: string;
+}
+
+interface Subcategory {
+  id: string;
+  category_id: string;
+  name: string;
+}
+
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isProductsOpen, setIsProductsOpen] = useState(false);
+  const [expandedCat, setExpandedCat] = useState<string | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
   const navigate = useNavigate();
   const location = useLocation();
 
-  const productCategories = [
-    { name: "Sementes", id: "products", category: "sementes" },
-    { name: "Fertilizantes", id: "products", category: "fertilizantes" },
-    { name: "Defensivos", id: "products", category: "defensivos" },
-    { name: "Corretivos de Solo", id: "products", category: "corretivos" },
-    { name: "Pastagens em geral", id: "products", category: "pastagens" },
-  ];
+  useEffect(() => {
+    const fetchCats = async () => {
+      const [catRes, subRes] = await Promise.all([
+        supabase.from("categories").select("*").order("display_order"),
+        supabase.from("subcategories").select("*").order("display_order"),
+      ]);
+      setCategories(catRes.data || []);
+      setSubcategories(subRes.data || []);
+    };
+    fetchCats();
+  }, []);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -38,16 +54,10 @@ const Header = () => {
     if (location.pathname !== "/") {
       navigate("/");
       setTimeout(() => {
-        const element = document.getElementById(id);
-        if (element) {
-          element.scrollIntoView({ behavior: "smooth" });
-        }
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
       }, 100);
     } else {
-      const element = document.getElementById(id);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
     }
     setIsMobileMenuOpen(false);
   };
@@ -61,55 +71,62 @@ const Header = () => {
     setIsMobileMenuOpen(false);
   };
 
+  const goToStore = (category?: string, subcategoryId?: string) => {
+    const params = new URLSearchParams();
+    if (category) params.set("categoria", category);
+    if (subcategoryId) params.set("sub", subcategoryId);
+    navigate(`/loja${params.toString() ? `?${params}` : ""}`);
+    setIsMobileMenuOpen(false);
+  };
+
+  const linkClass = "font-heading font-medium text-sm text-foreground hover:text-primary hover:font-bold hover:scale-110 transition-all duration-300";
+
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-background/95 backdrop-blur-md ${
-        isScrolled ? "shadow-soft" : ""
-      }`}
-    >
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-background/95 backdrop-blur-md ${isScrolled ? "shadow-soft" : ""}`}>
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          <img 
-            src={renovarLogo} 
-            alt="Renovar Agrobusiness" 
-            className="h-12 w-auto"
-          />
+          <img src={renovarLogo} alt="Renovar Agrobusiness" className="h-12 w-auto" />
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
-            <button
-              onClick={() => scrollToSection("home")}
-              className="font-heading font-medium text-sm text-foreground hover:text-primary hover:font-bold hover:scale-110 transition-all duration-300"
-            >
-              Início
-            </button>
-            <button
-              onClick={handleAboutClick}
-              className="font-heading font-medium text-sm text-foreground hover:text-primary hover:font-bold hover:scale-110 transition-all duration-300"
-            >
-              Sobre Nós
-            </button>
-            
+            <button onClick={() => scrollToSection("home")} className={linkClass}>Início</button>
+            <button onClick={handleAboutClick} className={linkClass}>Sobre Nós</button>
+
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="font-heading font-medium text-sm text-foreground hover:text-primary hover:font-bold hover:scale-110 transition-all duration-300 bg-transparent">
+                  <NavigationMenuTrigger className={`${linkClass} bg-transparent`}>
                     Produtos
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <div className="w-[400px] p-4 bg-background">
-                      <div className="grid gap-3">
-                        {productCategories.map((product) => (
-                          <button
-                            key={product.category}
-                            onClick={() => scrollToSection(product.id)}
-                            className="block select-none rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground text-left"
-                          >
-                            <div className="font-heading text-sm font-medium leading-none">
-                              {product.name}
+                    <div className="w-[500px] p-4 bg-background">
+                      <div className="grid gap-1">
+                        {categories.map((cat) => {
+                          const subs = subcategories.filter((s) => s.category_id === cat.id);
+                          return (
+                            <div key={cat.id}>
+                              <button
+                                onClick={() => goToStore(cat.name)}
+                                className="w-full text-left rounded-md p-3 font-heading text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
+                              >
+                                {cat.name}
+                              </button>
+                              {subs.length > 0 && (
+                                <div className="ml-4 mb-1">
+                                  {subs.map((sub) => (
+                                    <button
+                                      key={sub.id}
+                                      onClick={() => goToStore(cat.name, sub.id)}
+                                      className="block w-full text-left rounded-md px-3 py-1.5 text-xs text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+                                    >
+                                      {sub.name}
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
                             </div>
-                          </button>
-                        ))}
+                          );
+                        })}
                       </div>
                     </div>
                   </NavigationMenuContent>
@@ -117,37 +134,13 @@ const Header = () => {
               </NavigationMenuList>
             </NavigationMenu>
 
-            <button
-              onClick={() => scrollToSection("results")}
-              className="font-heading font-medium text-sm text-foreground hover:text-primary hover:font-bold hover:scale-110 transition-all duration-300"
-            >
-              Resultados
-            </button>
-            <button
-              onClick={() => scrollToSection("partners")}
-              className="font-heading font-medium text-sm text-foreground hover:text-primary hover:font-bold hover:scale-110 transition-all duration-300"
-            >
-              Parceiros
-            </button>
-            <button
-              onClick={() => navigate("/loja")}
-              className="font-heading font-medium text-sm text-foreground hover:text-primary hover:font-bold hover:scale-110 transition-all duration-300"
-            >
-              Loja Virtual
-            </button>
-            <Button
-              onClick={() => scrollToSection("contact")}
-              className="bg-gradient-primary font-heading font-semibold"
-            >
-              Contato
-            </Button>
+            <button onClick={() => scrollToSection("results")} className={linkClass}>Resultados</button>
+            <button onClick={() => scrollToSection("partners")} className={linkClass}>Parceiros</button>
+            <button onClick={() => navigate("/loja")} className={linkClass}>Loja Virtual</button>
+            <Button onClick={() => scrollToSection("contact")} className="bg-gradient-primary font-heading font-semibold">Contato</Button>
           </nav>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden text-foreground"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
+          <button className="md:hidden text-foreground" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
             {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>
@@ -156,66 +149,40 @@ const Header = () => {
         {isMobileMenuOpen && (
           <nav className="md:hidden pb-6 animate-fade-in">
             <div className="flex flex-col gap-4">
-              <button
-                onClick={() => scrollToSection("home")}
-                className="font-heading font-medium text-foreground hover:text-primary transition-colors text-left py-2"
-              >
-                Início
-              </button>
-              <button
-                onClick={handleAboutClick}
-                className="font-heading font-medium text-foreground hover:text-primary transition-colors text-left py-2"
-              >
-                Sobre Nós
-              </button>
-              
-              <div>
-                <button
-                  onClick={() => setIsProductsOpen(!isProductsOpen)}
-                  className="font-heading font-medium text-foreground hover:text-primary transition-colors text-left py-2 w-full flex items-center justify-between"
-                >
-                  Produtos
-                  <ChevronDown className={`transition-transform ${isProductsOpen ? 'rotate-180' : ''}`} size={20} />
-                </button>
-                {isProductsOpen && (
-                  <div className="ml-4 mt-2 space-y-2">
-                    {productCategories.map((product) => (
-                      <button
-                        key={product.category}
-                        onClick={() => scrollToSection(product.id)}
-                        className="block font-body text-sm text-muted-foreground hover:text-primary transition-colors text-left py-2"
-                      >
-                        {product.name}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
+              <button onClick={() => scrollToSection("home")} className="font-heading font-medium text-foreground hover:text-primary transition-colors text-left py-2">Início</button>
+              <button onClick={handleAboutClick} className="font-heading font-medium text-foreground hover:text-primary transition-colors text-left py-2">Sobre Nós</button>
 
-              <button
-                onClick={() => scrollToSection("results")}
-                className="font-heading font-medium text-foreground hover:text-primary transition-colors text-left py-2"
-              >
-                Resultados
-              </button>
-              <button
-                onClick={() => scrollToSection("partners")}
-                className="font-heading font-medium text-foreground hover:text-primary transition-colors text-left py-2"
-              >
-                Parceiros
-              </button>
-              <button
-                onClick={() => { navigate("/loja"); setIsMobileMenuOpen(false); }}
-                className="font-heading font-medium text-foreground hover:text-primary transition-colors text-left py-2"
-              >
-                Loja Virtual
-              </button>
-              <Button
-                onClick={() => scrollToSection("contact")}
-                className="bg-gradient-primary font-heading font-semibold w-full"
-              >
-                Contato
-              </Button>
+              {/* Mobile categories */}
+              {categories.map((cat) => {
+                const subs = subcategories.filter((s) => s.category_id === cat.id);
+                const isExpanded = expandedCat === cat.id;
+                return (
+                  <div key={cat.id}>
+                    <button
+                      onClick={() => subs.length > 0 ? setExpandedCat(isExpanded ? null : cat.id) : goToStore(cat.name)}
+                      className="font-heading font-medium text-foreground hover:text-primary transition-colors text-left py-2 w-full flex items-center justify-between"
+                    >
+                      {cat.name}
+                      {subs.length > 0 && <ChevronDown className={`transition-transform ${isExpanded ? "rotate-180" : ""}`} size={20} />}
+                    </button>
+                    {isExpanded && subs.length > 0 && (
+                      <div className="ml-4 space-y-1">
+                        <button onClick={() => goToStore(cat.name)} className="block text-sm text-muted-foreground hover:text-primary py-1">Ver todos</button>
+                        {subs.map((sub) => (
+                          <button key={sub.id} onClick={() => goToStore(cat.name, sub.id)} className="block text-sm text-muted-foreground hover:text-primary py-1">
+                            {sub.name}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+
+              <button onClick={() => scrollToSection("results")} className="font-heading font-medium text-foreground hover:text-primary transition-colors text-left py-2">Resultados</button>
+              <button onClick={() => scrollToSection("partners")} className="font-heading font-medium text-foreground hover:text-primary transition-colors text-left py-2">Parceiros</button>
+              <button onClick={() => { navigate("/loja"); setIsMobileMenuOpen(false); }} className="font-heading font-medium text-foreground hover:text-primary transition-colors text-left py-2">Loja Virtual</button>
+              <Button onClick={() => scrollToSection("contact")} className="bg-gradient-primary font-heading font-semibold w-full">Contato</Button>
             </div>
           </nav>
         )}

@@ -27,6 +27,7 @@ import {
 const menuItems = [
   { title: "Dashboard", url: "/admin", icon: LayoutDashboard },
   { title: "Banners", url: "/admin/banners", icon: Image },
+  { title: "Categorias", url: "/admin/categorias", icon: Leaf },
   { title: "Produtos", url: "/admin/produtos", icon: Package },
   { title: "Parceiros", url: "/admin/parceiros", icon: Users },
   { title: "Notícias", url: "/admin/noticias", icon: Newspaper },
