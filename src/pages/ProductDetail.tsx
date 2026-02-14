@@ -18,6 +18,7 @@ interface Product {
   category: string;
   image_url: string | null;
   icon_name: string;
+  price: number | null;
 }
 
 const ProductDetail = () => {
@@ -117,6 +118,12 @@ const ProductDetail = () => {
                 {product.title}
               </h1>
 
+              {product.price != null && (
+                <p className="font-heading text-2xl font-bold text-primary mb-4">
+                  {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(product.price)}
+                </p>
+              )}
+
               <p className="font-body text-muted-foreground text-lg leading-relaxed mb-8">
                 {product.description}
               </p>
@@ -131,6 +138,7 @@ const ProductDetail = () => {
                       title: product.title,
                       category: product.category,
                       image_url: product.image_url,
+                      price: product.price ?? null,
                     })
                   }
                 >

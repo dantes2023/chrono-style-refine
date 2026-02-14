@@ -125,6 +125,93 @@ export type Database = {
         }
         Relationships: []
       }
+      order_items: {
+        Row: {
+          created_at: string
+          id: string
+          order_id: string
+          product_id: string
+          product_title: string
+          quantity: number
+          unit_price: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          order_id: string
+          product_id: string
+          product_title: string
+          quantity?: number
+          unit_price?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          order_id?: string
+          product_id?: string
+          product_title?: string
+          quantity?: number
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          created_at: string
+          customer_address: string | null
+          customer_city: string | null
+          customer_email: string | null
+          customer_name: string
+          customer_notes: string | null
+          customer_phone: string
+          id: string
+          status: string
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          customer_address?: string | null
+          customer_city?: string | null
+          customer_email?: string | null
+          customer_name: string
+          customer_notes?: string | null
+          customer_phone: string
+          id?: string
+          status?: string
+          total?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          customer_address?: string | null
+          customer_city?: string | null
+          customer_email?: string | null
+          customer_name?: string
+          customer_notes?: string | null
+          customer_phone?: string
+          id?: string
+          status?: string
+          total?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       partners: {
         Row: {
           created_at: string
@@ -170,6 +257,7 @@ export type Database = {
           id: string
           image_url: string | null
           is_active: boolean
+          price: number | null
           subcategory_id: string | null
           technical_sheet: Json | null
           title: string
@@ -186,6 +274,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_active?: boolean
+          price?: number | null
           subcategory_id?: string | null
           technical_sheet?: Json | null
           title: string
@@ -202,6 +291,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_active?: boolean
+          price?: number | null
           subcategory_id?: string | null
           technical_sheet?: Json | null
           title?: string
