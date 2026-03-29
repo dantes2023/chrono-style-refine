@@ -36,7 +36,6 @@ const ResultsPage = () => {
 
   const [formData, setFormData] = useState({
     title: "",
-    description: "",
     detailed_description: "",
     image_url: "",
     is_active: true,
