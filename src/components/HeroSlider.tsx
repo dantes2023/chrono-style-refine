@@ -3,72 +3,27 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
-import tractorSunset from "@/assets/tractor-sunset.jpg";
-import cornField from "@/assets/corn.jpg";
-import pastureField from "@/assets/pasture-field.png";
-import seedsVariety from "@/assets/seeds-variety.jpg";
-
-interface Slide {
-  id: number;
-  image: string;
-  title: string;
-  highlight: string;
-  description: string;
-  buttonText: string;
-  buttonLink: string;
-}
-
-const slides: Slide[] = [
-  {
-    id: 1,
-    image: tractorSunset,
-    title: "Sementes de Alta",
-    highlight: "Qualidade",
-    description: "Líder em pesquisa e desenvolvimento de sementes. Soluções completas para maximizar a produtividade do seu agronegócio.",
-    buttonText: "Compre em nossa Loja Virtual",
-    buttonLink: "#contact",
-  },
-  {
-    id: 2,
-    image: cornField,
-    title: "Tecnologia e",
-    highlight: "Inovação",
-    description: "Variedades desenvolvidas com a mais alta tecnologia para garantir os melhores resultados na sua lavoura.",
-    buttonText: "Conheça Nossos Produtos",
-    buttonLink: "#products",
-  },
-  {
-    id: 3,
-    image: pastureField,
-    title: "Pastagens de",
-    highlight: "Alta Performance",
-    description: "Sementes forrageiras selecionadas para maximizar a produtividade do seu rebanho.",
-    buttonText: "Saiba Mais",
-    buttonLink: "#about",
-  },
-  {
-    id: 4,
-    image: seedsVariety,
-    title: "Variedades",
-    highlight: "Premium",
-    description: "Amplo portfólio de sementes para atender todas as necessidades do produtor rural.",
-    buttonText: "Ver Catálogo",
-    buttonLink: "#products",
-  },
-  {
-    id: 5,
-    image: tractorSunset,
-    title: "Parceria que",
-    highlight: "Gera Resultados",
-    description: "Mais de 25 anos de experiência no mercado agrícola, sempre ao lado do produtor.",
-    buttonText: "Fale Conosco",
-    buttonLink: "#contact",
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const HeroSlider = () => {
   const [isPlaying, setIsPlaying] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const { data: slides = [], isLoading } = useQuery({
+    queryKey: ["active-banners"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("banners")
+        .select("*")
+        .eq("is_active", true)
+        .order("display_order", { ascending: true })
+        .limit(5);
+      if (error) throw error;
+      return data;
+    },
+  });
 
   const autoplayPlugin = Autoplay({
     delay: 5000,
@@ -118,10 +73,26 @@ const HeroSlider = () => {
   const handleButtonClick = (link: string) => {
     if (link.startsWith("#")) {
       document.getElementById(link.slice(1))?.scrollIntoView({ behavior: "smooth" });
+    } else if (link.startsWith("/")) {
+      window.location.href = link;
     } else {
       window.location.href = link;
     }
   };
+
+  if (isLoading) {
+    return (
+      <section id="home" className="relative min-h-screen bg-primary flex items-center justify-center">
+        <div className="container mx-auto px-4 lg:px-8">
+          <Skeleton className="h-16 w-2/3 mb-6 bg-white/10" />
+          <Skeleton className="h-8 w-1/2 mb-8 bg-white/10" />
+          <Skeleton className="h-12 w-48 bg-white/10" />
+        </div>
+      </section>
+    );
+  }
+
+  if (slides.length === 0) return null;
 
   return (
     <section id="home" className="relative min-h-screen overflow-hidden bg-background">
@@ -133,17 +104,15 @@ const HeroSlider = () => {
               key={slide.id}
               className="flex-[0_0_100%] min-w-0 relative min-h-screen"
             >
-              {/* Background Image with Overlay */}
               <div className="absolute inset-0 z-0">
                 <img
-                  src={slide.image}
+                  src={slide.image_url}
                   alt={slide.title}
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/80 to-transparent" />
               </div>
 
-              {/* Content */}
               <div className="container mx-auto px-4 lg:px-8 relative z-10 py-32 h-full flex items-center">
                 <div className="max-w-3xl animate-fade-in-up">
                   <h1 className="font-heading text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
@@ -157,10 +126,10 @@ const HeroSlider = () => {
 
                   <Button
                     size="lg"
-                    onClick={() => handleButtonClick(slide.buttonLink)}
+                    onClick={() => handleButtonClick(slide.button_link)}
                     className="bg-secondary hover:bg-secondary/90 text-primary font-heading font-bold text-lg group"
                   >
-                    {slide.buttonText}
+                    {slide.button_text}
                     <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
                   </Button>
                 </div>
@@ -170,9 +139,7 @@ const HeroSlider = () => {
         </div>
       </div>
 
-      {/* Controls */}
       <div className="absolute bottom-32 left-1/2 -translate-x-1/2 z-20 flex items-center gap-4">
-        {/* Dots */}
         <div className="flex gap-2">
           {slides.map((_, index) => (
             <button
@@ -188,7 +155,6 @@ const HeroSlider = () => {
           ))}
         </div>
 
-        {/* Navigation Buttons */}
         <div className="flex gap-2 ml-4">
           <Button
             variant="outline"
@@ -220,7 +186,6 @@ const HeroSlider = () => {
         </div>
       </div>
 
-      {/* Decorative Wave */}
       <div className="absolute bottom-0 left-0 right-0 z-10">
         <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path

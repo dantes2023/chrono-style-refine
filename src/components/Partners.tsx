@@ -1,70 +1,21 @@
-import { useState } from "react";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-
-import boaSafraLogo from "@/assets/boa-safra-logo.png";
-import lgSementesLogo from "@/assets/lg-sementes-logo.png";
-import agroNorteCerradoLogo from "@/assets/agro-norte-cerrado-logo.jpg";
-import barenbrugLogo from "@/assets/barenbrug-logo.png";
-import quimifolLogo from "@/assets/quimifol-logo.png";
-import agrivalleLogo from "@/assets/agrivalle-logo.png";
-import yaraLogo from "@/assets/yara-logo.png";
-import soloRicoLogo from "@/assets/solo-rico-logo.jpg";
-import grupoRenovarLogo from "@/assets/grupo-renovar-logo.png";
-
-import bayerSeminisLogo from "@/assets/bayer-seminis-logo.png";
-import topseedLogo from "@/assets/topseed-logo.png";
-import agrocincoLogo from "@/assets/agrocinco-logo.png";
-import ameribrasLogo from "@/assets/ameribras-logo.png";
-import ourofinoLogo from "@/assets/ourofino-logo.png";
-import sumitomoLogo from "@/assets/sumitomo-logo.jpg";
-import gasparimLogo from "@/assets/gasparim-logo.png";
-import barenbrugBaixaoLogo from "@/assets/barenbrug-baixao-logo.jpg";
-import milagroLogo from "@/assets/milagro-logo.png";
-import grupoRenovarBaixaoLogo from "@/assets/grupo-renovar-baixao-logo.png";
-
-const cerradoPartners = [
-  { name: "Boa Safra Sementes", logo: boaSafraLogo },
-  { name: "LG Sementes", logo: lgSementesLogo },
-  { name: "Agro Norte", logo: agroNorteCerradoLogo },
-  { name: "Barenbrug", logo: barenbrugLogo },
-  { name: "Quimifol", logo: quimifolLogo },
-  { name: "Agrivalle", logo: agrivalleLogo },
-  { name: "Yara", logo: yaraLogo },
-  { name: "Solo Rico", logo: soloRicoLogo },
-  { name: "Grupo Renovar", logo: grupoRenovarLogo },
-];
-
-const baixaoPartners = [
-  { name: "Bayer Seminis", logo: bayerSeminisLogo },
-  { name: "Topseed", logo: topseedLogo },
-  { name: "Agrocinco", logo: agrocincoLogo },
-  { name: "Ameribras", logo: ameribrasLogo },
-  { name: "Ourofino", logo: ourofinoLogo },
-  { name: "Sumitomo Chemical", logo: sumitomoLogo },
-  { name: "Sementes Gasparim", logo: gasparimLogo },
-  { name: "Barenbrug", logo: barenbrugBaixaoLogo },
-  { name: "Milagro", logo: milagroLogo },
-  { name: "Grupo Renovar", logo: grupoRenovarBaixaoLogo },
-];
-
-const PartnerGrid = ({ partners }: { partners: { name: string; logo: string }[] }) => (
-  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
-    {partners.map((partner, index) => (
-      <div
-        key={index}
-        className="group bg-card rounded-2xl p-6 shadow-soft hover:shadow-elevated transition-all duration-300 hover:-translate-y-2 flex items-center justify-center min-h-[100px]"
-      >
-        <img
-          src={partner.logo}
-          alt={partner.name}
-          className="w-full h-auto max-h-20 object-contain grayscale group-hover:grayscale-0 transition-all duration-300"
-        />
-      </div>
-    ))}
-  </div>
-);
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Partners = () => {
+  const { data: partners = [], isLoading } = useQuery({
+    queryKey: ["active-partners"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("partners")
+        .select("*")
+        .eq("is_active", true)
+        .order("display_order", { ascending: true });
+      if (error) throw error;
+      return data;
+    },
+  });
+
   return (
     <section id="partners" className="py-20 bg-muted/30">
       <div className="container mx-auto px-4 lg:px-8">
@@ -84,26 +35,32 @@ const Partners = () => {
           </p>
         </div>
 
-        <Tabs defaultValue="cerrado" className="w-full">
-          <div className="flex justify-center mb-10">
-            <TabsList className="bg-card shadow-soft">
-              <TabsTrigger value="cerrado" className="font-heading font-semibold px-6">
-                Cerrado
-              </TabsTrigger>
-              <TabsTrigger value="baixao" className="font-heading font-semibold px-6">
-                Baixão
-              </TabsTrigger>
-            </TabsList>
+        {isLoading ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <Skeleton key={i} className="h-[100px] rounded-2xl" />
+            ))}
           </div>
-
-          <TabsContent value="cerrado">
-            <PartnerGrid partners={cerradoPartners} />
-          </TabsContent>
-
-          <TabsContent value="baixao">
-            <PartnerGrid partners={baixaoPartners} />
-          </TabsContent>
-        </Tabs>
+        ) : partners.length === 0 ? null : (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+            {partners.map((partner) => (
+              <a
+                key={partner.id}
+                href={partner.website_url || undefined}
+                target={partner.website_url ? "_blank" : undefined}
+                rel={partner.website_url ? "noopener noreferrer" : undefined}
+                className="group bg-card rounded-2xl p-6 shadow-soft hover:shadow-elevated transition-all duration-300 hover:-translate-y-2 flex items-center justify-center min-h-[100px]"
+              >
+                <img
+                  src={partner.logo_url}
+                  alt={partner.name}
+                  className="w-full h-auto max-h-20 object-contain grayscale group-hover:grayscale-0 transition-all duration-300"
+                  loading="lazy"
+                />
+              </a>
+            ))}
+          </div>
+        )}
 
         <div className="mt-16 max-w-3xl mx-auto bg-gradient-primary rounded-2xl p-8 md:p-12 text-center shadow-elevated">
           <h3 className="font-heading text-3xl md:text-4xl font-bold text-white mb-4">
