@@ -184,7 +184,7 @@ const Checkout = () => {
               updateQuantity={updateQuantity}
               removeItem={removeItem}
               onBack={() => setStep(1)}
-              onNext={() => setStep(3)}
+              onNext={handleGoToPayment}
             />
           )}
           {step === 3 && (
@@ -193,6 +193,8 @@ const Checkout = () => {
               onBack={() => setStep(2)}
               onSubmitOrder={handleSubmitOrder}
               isSubmitting={isSubmitting}
+              orderId={orderId || undefined}
+              customer={{ name: form.name, email: form.email, phone: form.phone }}
             />
           )}
           {step === 4 && <StepConfirmation />}
