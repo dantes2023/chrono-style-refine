@@ -11,6 +11,7 @@ import StorePage from "./pages/Store";
 import ProductDetailPage from "./pages/ProductDetail";
 import CheckoutPage from "./pages/Checkout";
 import NotFound from "./pages/NotFound";
+import NewsDetailPage from "./pages/NewsDetail";
 
 // Admin pages
 import AdminLogin from "./pages/admin/Login";
