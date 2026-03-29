@@ -58,7 +58,7 @@ const ResultsPage = () => {
   useEffect(() => { fetchResults(); }, []);
 
   const resetForm = () => {
-    setFormData({ title: "", description: "", detailed_description: "", image_url: "", is_active: true });
+    setFormData({ title: "", detailed_description: "", image_url: "", is_active: true });
     setEditingResult(null);
   };
 
