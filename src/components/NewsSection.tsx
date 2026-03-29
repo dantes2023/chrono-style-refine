@@ -75,7 +75,8 @@ const NewsSection = () => {
           {news.map((item) => (
             <article
               key={item.id}
-              className="group bg-card rounded-2xl shadow-soft hover:shadow-elevated transition-all duration-300 hover:-translate-y-2 overflow-hidden"
+              onClick={() => navigate(`/noticias/${item.slug}`)}
+              className="group bg-card rounded-2xl shadow-soft hover:shadow-elevated transition-all duration-300 hover:-translate-y-2 overflow-hidden cursor-pointer"
             >
               {item.image_url && (
                 <div className="h-48 overflow-hidden">
