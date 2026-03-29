@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import RichTextEditor from "@/components/admin/RichTextEditor";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -249,17 +250,11 @@ const NewsPage = () => {
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="content">Conteúdo</Label>
-                <Textarea
-                  id="content"
-                  value={formData.content}
-                  onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                  placeholder="Conteúdo completo da notícia..."
-                  rows={8}
-                  required
-                />
-              </div>
+              <RichTextEditor
+                value={formData.content}
+                onChange={(html) => setFormData({ ...formData, content: html })}
+                label="Conteúdo"
+              />
 
               <ImageUpload
                 value={formData.image_url}
