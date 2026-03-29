@@ -66,7 +66,6 @@ const ResultsPage = () => {
     setEditingResult(result);
     setFormData({
       title: result.title,
-      description: result.description,
       detailed_description: result.detailed_description || "",
       image_url: result.image_url || "",
       is_active: result.is_active,
