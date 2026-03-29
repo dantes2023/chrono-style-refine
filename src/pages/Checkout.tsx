@@ -29,6 +29,7 @@ const Checkout = () => {
   const { toast } = useToast();
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [orderId, setOrderId] = useState<string | null>(null);
   const [form, setForm] = useState<CustomerForm>({ name: "", phone: "", email: "", address: "", city: "", notes: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -45,7 +46,6 @@ const Checkout = () => {
           notes: "",
         };
         setForm(updatedForm);
-        // Skip step 1 if name and phone are filled
         if (updatedForm.name && updatedForm.phone) {
           setStep(2);
         }
@@ -73,9 +73,11 @@ const Checkout = () => {
     setStep(2);
   };
 
-  const handleSubmitOrder = async (paymentMethod: string) => {
-    if (items.length === 0) return;
-    setIsSubmitting(true);
+  // Create order in DB (called when moving to payment or submitting)
+  const createOrder = async (status: string): Promise<string | null> => {
+    if (orderId) return orderId; // Already created
+    if (items.length === 0) return null;
+
     try {
       const { data: order, error: orderError } = await supabase
         .from("orders")
@@ -88,7 +90,7 @@ const Checkout = () => {
           customer_notes: form.notes?.trim() || null,
           total: subtotal,
           user_id: user?.id || null,
-          status: paymentMethod === "pending" ? "pending" : "awaiting_payment",
+          status,
         } as any)
         .select("id")
         .single();
@@ -105,6 +107,33 @@ const Checkout = () => {
 
       const { error: itemsError } = await supabase.from("order_items").insert(orderItems);
       if (itemsError) throw itemsError;
+
+      setOrderId(order.id);
+      return order.id;
+    } catch (err) {
+      console.error(err);
+      toast({ title: "Erro ao criar pedido", description: "Tente novamente.", variant: "destructive" });
+      return null;
+    }
+  };
+
+  const handleGoToPayment = async () => {
+    // Create order before showing payment
+    setIsSubmitting(true);
+    const id = await createOrder("awaiting_payment");
+    setIsSubmitting(false);
+    if (id) setStep(3);
+  };
+
+  const handleSubmitOrder = async (paymentMethod: string) => {
+    setIsSubmitting(true);
+    try {
+      const id = await createOrder(paymentMethod === "pending" ? "pending" : "awaiting_payment");
+      if (!id) return;
+
+      if (paymentMethod === "paid") {
+        await supabase.from("orders").update({ status: "paid", updated_at: new Date().toISOString() } as any).eq("id", id);
+      }
 
       clearCart();
       setStep(4);
