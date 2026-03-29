@@ -7,7 +7,8 @@ import Image from "@tiptap/extension-image";
 import Highlight from "@tiptap/extension-highlight";
 import Color from "@tiptap/extension-color";
 import { TextStyle } from "@tiptap/extension-text-style";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Toggle } from "@/components/ui/toggle";
 import {
   Bold,
