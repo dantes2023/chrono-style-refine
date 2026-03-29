@@ -248,6 +248,33 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_settings: {
+        Row: {
+          config: Json
+          created_at: string
+          gateway: string
+          id: string
+          is_active: boolean
+          updated_at: string
+        }
+        Insert: {
+          config?: Json
+          created_at?: string
+          gateway?: string
+          id?: string
+          is_active?: boolean
+          updated_at?: string
+        }
+        Update: {
+          config?: Json
+          created_at?: string
+          gateway?: string
+          id?: string
+          is_active?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           category: string
