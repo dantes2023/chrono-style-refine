@@ -6,6 +6,7 @@ import { ptBR } from "date-fns/locale";
 import { useNavigate } from "react-router-dom";
 
 const NewsSection = () => {
+  const navigate = useNavigate();
   const { data: news, isLoading } = useQuery({
     queryKey: ["published-news"],
     queryFn: async () => {
