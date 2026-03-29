@@ -89,9 +89,11 @@ const ResultsPage = () => {
     setIsSaving(true);
 
     const payload = {
-      ...formData,
+      title: formData.title,
+      description: formData.title,
       detailed_description: formData.detailed_description || null,
       image_url: formData.image_url || null,
+      is_active: formData.is_active,
       display_order: editingResult ? editingResult.display_order : results.length,
     };
 
