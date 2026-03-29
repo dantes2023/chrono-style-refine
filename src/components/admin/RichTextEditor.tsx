@@ -77,8 +77,6 @@ const RichTextEditor = ({ value, onChange, label }: RichTextEditorProps) => {
     }
   };
 
-  const imageInputRef = useRef<HTMLInputElement>(null);
-
   const addImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
