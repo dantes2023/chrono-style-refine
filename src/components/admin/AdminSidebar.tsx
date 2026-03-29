@@ -23,6 +23,7 @@ import {
   Home,
   Leaf,
   ShoppingBag,
+  CreditCard,
 } from "lucide-react";
 
 const menuItems = [
@@ -33,6 +34,7 @@ const menuItems = [
   { title: "Parceiros", url: "/admin/parceiros", icon: Users },
   { title: "Notícias", url: "/admin/noticias", icon: Newspaper },
   { title: "Pedidos", url: "/admin/pedidos", icon: ShoppingBag },
+  { title: "Pagamentos", url: "/admin/pagamentos", icon: CreditCard },
 ];
 
 const AdminSidebar = () => {
