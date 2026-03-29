@@ -25,6 +25,7 @@ import {
   ShoppingBag,
   CreditCard,
   Bell,
+  Trophy,
 } from "lucide-react";
 
 const menuItems = [
@@ -33,6 +34,7 @@ const menuItems = [
   { title: "Categorias", url: "/admin/categorias", icon: Leaf },
   { title: "Produtos", url: "/admin/produtos", icon: Package },
   { title: "Parceiros", url: "/admin/parceiros", icon: Users },
+  { title: "Resultados", url: "/admin/resultados", icon: Trophy },
   { title: "Notícias", url: "/admin/noticias", icon: Newspaper },
   { title: "Pedidos", url: "/admin/pedidos", icon: ShoppingBag },
   { title: "Notificações", url: "/admin/notificacoes", icon: Bell },
