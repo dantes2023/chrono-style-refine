@@ -243,10 +243,17 @@ const RichTextEditor = ({ value, onChange, label }: RichTextEditorProps) => {
           >
             <LinkIcon className="h-4 w-4" />
           </Toggle>
+          <input
+            ref={imageInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            className="hidden"
+            onChange={addImage}
+          />
           <Toggle
             size="sm"
             pressed={false}
-            onPressedChange={addImage}
+            onPressedChange={() => imageInputRef.current?.click()}
             aria-label="Imagem"
           >
             <ImageIcon className="h-4 w-4" />
