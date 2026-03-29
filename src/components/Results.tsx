@@ -103,9 +103,10 @@ const Results = () => {
             />
           )}
           {selectedResult?.detailed_description && (
-            <div className="prose prose-sm max-w-none text-muted-foreground mt-2">
-              <p className="whitespace-pre-wrap">{selectedResult.detailed_description}</p>
-            </div>
+            <div
+              className="prose prose-sm max-w-none text-muted-foreground mt-2"
+              dangerouslySetInnerHTML={{ __html: selectedResult.detailed_description }}
+            />
           )}
         </DialogContent>
       </Dialog>

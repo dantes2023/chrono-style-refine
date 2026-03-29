@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import RichTextEditor from "@/components/admin/RichTextEditor";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -36,7 +36,6 @@ const ResultsPage = () => {
 
   const [formData, setFormData] = useState({
     title: "",
-    description: "",
     detailed_description: "",
     image_url: "",
     is_active: true,
@@ -59,7 +58,7 @@ const ResultsPage = () => {
   useEffect(() => { fetchResults(); }, []);
 
   const resetForm = () => {
-    setFormData({ title: "", description: "", detailed_description: "", image_url: "", is_active: true });
+    setFormData({ title: "", detailed_description: "", image_url: "", is_active: true });
     setEditingResult(null);
   };
 
@@ -67,7 +66,6 @@ const ResultsPage = () => {
     setEditingResult(result);
     setFormData({
       title: result.title,
-      description: result.description,
       detailed_description: result.detailed_description || "",
       image_url: result.image_url || "",
       is_active: result.is_active,
@@ -91,9 +89,11 @@ const ResultsPage = () => {
     setIsSaving(true);
 
     const payload = {
-      ...formData,
+      title: formData.title,
+      description: formData.title,
       detailed_description: formData.detailed_description || null,
       image_url: formData.image_url || null,
+      is_active: formData.is_active,
       display_order: editingResult ? editingResult.display_order : results.length,
     };
 
@@ -154,27 +154,11 @@ const ResultsPage = () => {
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="description">Descrição Curta</Label>
-                <Textarea
-                  id="description"
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder="Breve descrição do resultado..."
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="detailed_description">Descrição Detalhada</Label>
-                <Textarea
-                  id="detailed_description"
-                  value={formData.detailed_description}
-                  onChange={(e) => setFormData({ ...formData, detailed_description: e.target.value })}
-                  placeholder="Informações detalhadas exibidas ao clicar..."
-                  rows={5}
-                />
-              </div>
+              <RichTextEditor
+                value={formData.detailed_description}
+                onChange={(val) => setFormData({ ...formData, detailed_description: val })}
+                label="Descrição Detalhada"
+              />
 
               <ImageUpload
                 value={formData.image_url}
