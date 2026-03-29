@@ -250,17 +250,11 @@ const NewsPage = () => {
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="content">Conteúdo</Label>
-                <Textarea
-                  id="content"
-                  value={formData.content}
-                  onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                  placeholder="Conteúdo completo da notícia..."
-                  rows={8}
-                  required
-                />
-              </div>
+              <RichTextEditor
+                value={formData.content}
+                onChange={(html) => setFormData({ ...formData, content: html })}
+                label="Conteúdo"
+              />
 
               <ImageUpload
                 value={formData.image_url}
