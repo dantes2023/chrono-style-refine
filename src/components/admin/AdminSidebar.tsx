@@ -24,6 +24,7 @@ import {
   Leaf,
   ShoppingBag,
   CreditCard,
+  Bell,
 } from "lucide-react";
 
 const menuItems = [
@@ -34,6 +35,7 @@ const menuItems = [
   { title: "Parceiros", url: "/admin/parceiros", icon: Users },
   { title: "Notícias", url: "/admin/noticias", icon: Newspaper },
   { title: "Pedidos", url: "/admin/pedidos", icon: ShoppingBag },
+  { title: "Notificações", url: "/admin/notificacoes", icon: Bell },
   { title: "Pagamentos", url: "/admin/pagamentos", icon: CreditCard },
 ];
 

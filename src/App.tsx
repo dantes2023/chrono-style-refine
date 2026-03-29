@@ -23,6 +23,7 @@ import NewsPage from "./pages/admin/News";
 import CategoriesPage from "./pages/admin/Categories";
 import OrdersPage from "./pages/admin/Orders";
 import PaymentSettingsPage from "./pages/admin/PaymentSettings";
+import NotificationsPage from "./pages/admin/Notifications";
 import CustomerLogin from "./pages/auth/Login";
 import CustomerRegister from "./pages/auth/Register";
 import MyAccountPage from "./pages/customer/MyAccount";
@@ -60,6 +61,7 @@ const App = () => (
               <Route path="/admin/noticias" element={<AdminLayout><NewsPage /></AdminLayout>} />
               <Route path="/admin/pedidos" element={<AdminLayout><OrdersPage /></AdminLayout>} />
               <Route path="/admin/pagamentos" element={<AdminLayout><PaymentSettingsPage /></AdminLayout>} />
+              <Route path="/admin/notificacoes" element={<AdminLayout><NotificationsPage /></AdminLayout>} />
               
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
