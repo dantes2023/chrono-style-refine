@@ -154,27 +154,11 @@ const ResultsPage = () => {
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="description">Descrição Curta</Label>
-                <Textarea
-                  id="description"
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder="Breve descrição do resultado..."
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="detailed_description">Descrição Detalhada</Label>
-                <Textarea
-                  id="detailed_description"
-                  value={formData.detailed_description}
-                  onChange={(e) => setFormData({ ...formData, detailed_description: e.target.value })}
-                  placeholder="Informações detalhadas exibidas ao clicar..."
-                  rows={5}
-                />
-              </div>
+              <RichTextEditor
+                value={formData.detailed_description}
+                onChange={(val) => setFormData({ ...formData, detailed_description: val })}
+                label="Descrição Detalhada"
+              />
 
               <ImageUpload
                 value={formData.image_url}
