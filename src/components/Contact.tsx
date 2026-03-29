@@ -53,8 +53,8 @@ const Contact = () => {
               </div>
               <div>
                 <h3 className="font-heading font-bold text-foreground text-lg mb-1">Telefone</h3>
-                <p className="font-body text-muted-foreground">(11) 3456-7890</p>
-                <p className="font-body text-muted-foreground">(11) 98765-4321</p>
+                <p className="font-body text-muted-foreground">(89) 3562-1060</p>
+                <p className="font-body text-muted-foreground">(89) 98101-8588</p>
               </div>
             </div>
 
@@ -64,8 +64,8 @@ const Contact = () => {
               </div>
               <div>
                 <h3 className="font-heading font-bold text-foreground text-lg mb-1">E-mail</h3>
-                <p className="font-body text-muted-foreground">contato@renovar.agr.br</p>
                 <p className="font-body text-muted-foreground">vendas@renovar.agr.br</p>
+                <p className="font-body text-muted-foreground">gerencia@renovar.agr.br</p>
               </div>
             </div>
 
@@ -76,8 +76,9 @@ const Contact = () => {
               <div>
                 <h3 className="font-heading font-bold text-foreground text-lg mb-1">Endereço</h3>
                 <p className="font-body text-muted-foreground">
-                  Rodovia BR-101, Km 15<br />
-                  São Paulo, SP - Brasil
+                  Av. Ademar Diógenes, 252<br />
+                  Bairro São Pedro<br />
+                  CEP 64.900-000 - Bom Jesus, PI
                 </p>
               </div>
             </div>
