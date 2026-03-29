@@ -24,6 +24,7 @@ import CategoriesPage from "./pages/admin/Categories";
 import OrdersPage from "./pages/admin/Orders";
 import PaymentSettingsPage from "./pages/admin/PaymentSettings";
 import NotificationsPage from "./pages/admin/Notifications";
+import ResultsAdminPage from "./pages/admin/Results";
 import CustomerLogin from "./pages/auth/Login";
 import CustomerRegister from "./pages/auth/Register";
 import MyAccountPage from "./pages/customer/MyAccount";
