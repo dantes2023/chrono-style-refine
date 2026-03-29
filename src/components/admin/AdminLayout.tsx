@@ -14,6 +14,31 @@ interface AdminLayoutProps {
 const AdminLayout = ({ children }: AdminLayoutProps) => {
   const { user, isAdmin, isLoading } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    if (!isAdmin) return;
+
+    const fetchCount = async () => {
+      const { count } = await supabase
+        .from("notifications")
+        .select("*", { count: "exact", head: true })
+        .eq("is_read", false);
+      setUnreadCount(count || 0);
+    };
+
+    fetchCount();
+
+    const channel = supabase
+      .channel("admin-notif-count")
+      .on("postgres_changes", { event: "*", schema: "public", table: "notifications" }, () => {
+        fetchCount();
+      })
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, [isAdmin]);
 
   if (isLoading) {
     return (
