@@ -7,7 +7,8 @@ import Image from "@tiptap/extension-image";
 import Highlight from "@tiptap/extension-highlight";
 import Color from "@tiptap/extension-color";
 import { TextStyle } from "@tiptap/extension-text-style";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Toggle } from "@/components/ui/toggle";
 import {
   Bold,
@@ -65,6 +66,8 @@ const RichTextEditor = ({ value, onChange, label }: RichTextEditorProps) => {
     }
   }, [value, editor]);
 
+  const imageInputRef = useRef<HTMLInputElement>(null);
+
   if (!editor) return null;
 
   const addLink = () => {
@@ -74,11 +77,32 @@ const RichTextEditor = ({ value, onChange, label }: RichTextEditorProps) => {
     }
   };
 
-  const addImage = () => {
-    const url = window.prompt("URL da imagem:");
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
+  const addImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+    if (!allowedTypes.includes(file.type)) {
+      alert("Formato não suportado. Use JPG, PNG, WEBP ou GIF.");
+      return;
     }
+
+    const fileExt = file.name.split(".").pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+
+    const { data, error } = await supabase.storage
+      .from("images")
+      .upload(fileName, file);
+
+    if (error) {
+      alert("Erro ao fazer upload da imagem.");
+      return;
+    }
+
+    const { data: urlData } = supabase.storage.from("images").getPublicUrl(data.path);
+    editor.chain().focus().setImage({ src: urlData.publicUrl }).run();
+
+    if (imageInputRef.current) imageInputRef.current.value = "";
   };
 
   return (
@@ -219,10 +243,17 @@ const RichTextEditor = ({ value, onChange, label }: RichTextEditorProps) => {
           >
             <LinkIcon className="h-4 w-4" />
           </Toggle>
+          <input
+            ref={imageInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            className="hidden"
+            onChange={addImage}
+          />
           <Toggle
             size="sm"
             pressed={false}
-            onPressedChange={addImage}
+            onPressedChange={() => imageInputRef.current?.click()}
             aria-label="Imagem"
           >
             <ImageIcon className="h-4 w-4" />
