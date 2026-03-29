@@ -3,8 +3,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { Calendar, ArrowRight } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { useNavigate } from "react-router-dom";
 
 const NewsSection = () => {
+  const navigate = useNavigate();
   const { data: news, isLoading } = useQuery({
     queryKey: ["published-news"],
     queryFn: async () => {
@@ -73,7 +75,8 @@ const NewsSection = () => {
           {news.map((item) => (
             <article
               key={item.id}
-              className="group bg-card rounded-2xl shadow-soft hover:shadow-elevated transition-all duration-300 hover:-translate-y-2 overflow-hidden"
+              onClick={() => navigate(`/noticias/${item.slug}`)}
+              className="group bg-card rounded-2xl shadow-soft hover:shadow-elevated transition-all duration-300 hover:-translate-y-2 overflow-hidden cursor-pointer"
             >
               {item.image_url && (
                 <div className="h-48 overflow-hidden">
