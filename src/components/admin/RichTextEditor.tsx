@@ -74,11 +74,34 @@ const RichTextEditor = ({ value, onChange, label }: RichTextEditorProps) => {
     }
   };
 
-  const addImage = () => {
-    const url = window.prompt("URL da imagem:");
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
+  const imageInputRef = useRef<HTMLInputElement>(null);
+
+  const addImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+    if (!allowedTypes.includes(file.type)) {
+      alert("Formato não suportado. Use JPG, PNG, WEBP ou GIF.");
+      return;
     }
+
+    const fileExt = file.name.split(".").pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+
+    const { data, error } = await supabase.storage
+      .from("images")
+      .upload(fileName, file);
+
+    if (error) {
+      alert("Erro ao fazer upload da imagem.");
+      return;
+    }
+
+    const { data: urlData } = supabase.storage.from("images").getPublicUrl(data.path);
+    editor.chain().focus().setImage({ src: urlData.publicUrl }).run();
+
+    if (imageInputRef.current) imageInputRef.current.value = "";
   };
 
   return (
