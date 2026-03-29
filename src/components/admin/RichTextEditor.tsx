@@ -66,6 +66,8 @@ const RichTextEditor = ({ value, onChange, label }: RichTextEditorProps) => {
     }
   }, [value, editor]);
 
+  const imageInputRef = useRef<HTMLInputElement>(null);
+
   if (!editor) return null;
 
   const addLink = () => {
