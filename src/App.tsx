@@ -22,6 +22,7 @@ import PartnersPage from "./pages/admin/Partners";
 import NewsPage from "./pages/admin/News";
 import CategoriesPage from "./pages/admin/Categories";
 import OrdersPage from "./pages/admin/Orders";
+import PaymentSettingsPage from "./pages/admin/PaymentSettings";
 import CustomerLogin from "./pages/auth/Login";
 import CustomerRegister from "./pages/auth/Register";
 import MyAccountPage from "./pages/customer/MyAccount";
