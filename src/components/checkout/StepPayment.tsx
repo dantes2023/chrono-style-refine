@@ -59,12 +59,15 @@ const StepPayment = ({ subtotal, onBack, onSubmitOrder, isSubmitting, orderId, c
 
   useEffect(() => {
     supabase
-      .from("payment_settings")
-      .select("*")
-      .limit(1)
-      .single()
+      .rpc('get_payment_status')
       .then(({ data }) => {
-        if (data) setSettings(data as unknown as PaymentSettings);
+        if (data && data.length > 0) {
+          setSettings({
+            gateway: data[0].gateway,
+            is_active: data[0].is_active,
+            config: {},
+          } as unknown as PaymentSettings);
+        }
         setLoading(false);
       });
   }, []);
