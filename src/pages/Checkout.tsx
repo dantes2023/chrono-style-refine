@@ -36,14 +36,19 @@ const Checkout = () => {
     if (!user) return;
     supabase.from("profiles").select("*").eq("user_id", user.id).single().then(({ data }) => {
       if (data) {
-        setForm((f) => ({
-          ...f,
-          name: data.full_name || f.name,
-          phone: data.phone || f.phone,
-          email: data.email || f.email,
-          address: data.address || f.address,
-          city: data.city || f.city,
-        }));
+        const updatedForm = {
+          name: data.full_name || "",
+          phone: data.phone || "",
+          email: data.email || "",
+          address: data.address || "",
+          city: data.city || "",
+          notes: "",
+        };
+        setForm(updatedForm);
+        // Skip step 1 if name and phone are filled
+        if (updatedForm.name && updatedForm.phone) {
+          setStep(2);
+        }
       }
     });
   }, [user]);
