@@ -83,9 +83,11 @@ const Footer = () => {
           <div>
             <h3 className="font-heading font-bold text-lg mb-4">Contato</h3>
             <ul className="space-y-2 font-body text-white/80">
-              <li>(11) 3456-7890</li>
-              <li>contato@renovar.agr.br</li>
-              <li>Rodovia BR-101, Km 15<br />São Paulo, SP</li>
+              <li>(89) 3562-1060</li>
+              <li>(89) 98101-8588</li>
+              <li>vendas@renovar.agr.br</li>
+              <li>gerencia@renovar.agr.br</li>
+              <li>Av. Ademar Diógenes, 252<br />Bairro São Pedro<br />CEP 64.900-000 - Bom Jesus, PI</li>
             </ul>
           </div>
         </div>
